@@ -23,12 +23,12 @@ The whole system scheme looks like
 
 ---
 
- ![](images/maueScheme.png){width=100%}
+ ![](images/maueScheme.png)
 ---
 
 The sensor itself is a MEMS and rather small
 
- ![](images/MPU6050.png){width=25%}
+ ![](images/MPU6050.png)
 
 
 ## Setting up a Raspberry Pi as a Wireless Access Point
@@ -124,7 +124,7 @@ client.loop_forever()
 Using the extension UrsAI2Mqtt from [AI2 MQTT Extension: Messwerte hin und her](http://bienonline.magix.net/public/android-AI2-MQTT-de.html) the usage of mqtt message is very easy. The logic block can be seen below.
 
 
- ![](images/mitAppBuilderMaue.png){width=45% }
+ ![](images/mitAppBuilderMaue.png)
 
 
 
@@ -275,19 +275,19 @@ To connect to the mosquitto server on the raspi open the app and press "+" no th
 
 
 
- ![](images/connectToMosquittoServer.png){width=35% }
+ ![](images/connectToMosquittoServer.png)
 
 Once the connection is set up you can define tiles which subscribe certain topics, in this case  
 
 - name of the tile: maue direct text  
 - topic (sub): tests/message  
 
- ![](images/subscribeMqqtTopic.png){width=35% }
+ ![](images/subscribeMqqtTopic.png)
 
 
 An example on how the tiles look is given below
 
- ![](images/mqqtTextMessage.png){width=35% }
+ ![](images/mqqtTextMessage.png)
 
 
 
