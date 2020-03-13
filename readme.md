@@ -4,7 +4,7 @@
 
 In order to place a camper level so that people fall asleep rather than out of bed a system was developed which shows roll and pitch of the camper on an Android phone.
 
-The system consists of three components
+The system consists of three components:
 
 - MPU6050
     - I2C I/F
