@@ -6,9 +6,9 @@ In order to place a camper level so that people fall asleep rather than out of b
 
 The system consists of three components:
 
-- MPU6050
+- IMU MPU6050
     - I2C I/F
-- Raspi
+- Unix computer Raspberry Pi
     - mqtt server
     - python program
         - paho to deal with mqtt msg.
