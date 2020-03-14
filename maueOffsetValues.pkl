@@ -1,0 +1,6 @@
+(lp0
+VIMU/offset
+p1
+aS'{"pitchOffset":"-0.80","rollOffset":"-18.52"}'
+p2
+a.
