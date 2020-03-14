@@ -116,6 +116,14 @@ client.loop_forever()
 
 ```
 
+### Run client loop in "while True:" loop
+In order to get the client executed in a while loop of the program add 
+
+`client.loop_start()`
+
+The loop_start() starts a new thread, that calls the loop method at regular intervals for you. It also handles re-connects automatically.
+details at http://www.steves-internet-guide.com/loop-python-mqtt-client/
+
 
 ## App development with MIT APP Inventor
 
