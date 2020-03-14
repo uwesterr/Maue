@@ -77,26 +77,44 @@ def on_connect(client, userdata, flags, rc):
 
 # The callback for when a PUBLISH message is received from the server.
 def on_message(client, userdata, msg):
-    print(msg.topic+" "+str(msg.payload))
-    if(msg.topic == "IMU/offset"):
+  #  print(msg.topic+" "+str(msg.payload))
+    if(msg.topic == "IMU/offset"): # store offsets which are send from phone
         print("IMU/offset message: ", msg.topic)
         print(" IMU/offset value: ", msg.payload, "degree")
-        with open('objs.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
+        with open('maueOffsetValues.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
             pickle.dump([msg.topic,msg.payload], f)
-        with open('objs.pkl') as f:  # Python 3: open(..., 'rb')
-             retrievedMsg, retrievedValue,  = pickle.load(f)
         print("retrieved", retrievedMsg, " :", retrievedValue)  
-        print("class value", type(retrievedMsg))     
+        print("class value", type(retrievedMsg))  
+    if(msg.topic == "Phone/conected"): # sent msg to phone with offset values when phone is connected as indicated in topic Phone/connected
+        print("phone connected")
+        with open('maueOffsetValues.pkl') as f:  # Python 3: open(..., 'rb')
+             retrievedMsg, retrievedValue,  = pickle.load(f)
+        publish.single("Raspi/Offsets", retrievedValue, hostname=host)
 
+# read offset file and send offsets
+
+with open('maueOffsetValues.pkl') as f:  # Python 3: open(..., 'rb')
+             retrievedMsg, retrievedValue,  = pickle.load(f)
+
+print("Offset ready to send offset", retrievedValue)           
+publish.single("Raspi/Offsets", retrievedValue, hostname=host)
 
 client = mqtt.Client()
+
+
 client.on_connect = on_connect
 client.on_message = on_message
 
 client.connect(host, 1883, 60)
 
+
+# Phone/conected: phone has connected and needs stored offsets
+# IMU/offset: offset button at phone was pressed=> save new values in file maueOffsetValues.pkl and send offset values to phone
+#
+#
+
 client.subscribe([("IMU/pitch/offset", 2), ("IMU/roll/offset", 2),
-("IMU/pitch",2),("IMU/roll",2),("IMU/offset",2)])
+("IMU/pitch",2),("IMU/roll",2),("IMU/offset",2), ("Phone/conected", 2)])
 
 # The loop_start() starts a new thread, that calls the loop method at regular intervals for you. It also handles re-connects automatically.
 # details at http://www.steves-internet-guide.com/loop-python-mqtt-client/
@@ -137,8 +155,10 @@ while True:
         {'topic': "IMU/roll", 'payload': str(roll_deg)}]
 
 #    print ("Gx=%.2f" %Gx, u'\u00b0'+ "/s", "\tGy=%.2f" %Gy, u'\u00b0'+ "/s", "\tGz=%.2f" %Gz, u'\u00b0'+ "/s", "\tAx=%.2f g" %Ax, "\tAy=%.2f g" %Ay, "\tAz=%.2f g" %Az)     
-    print ("roll=%.2f" %roll_deg, "tpitch=%.2f" %pitch_deg)
+    #print ("roll=%.2f" %roll_deg, "tpitch=%.2f" %pitch_deg)
     # publish.single(topic="IMU/pitch", payload=str(pitch_deg), hostname=host)
     #mosquitto_pub -h localhost -t "test/message" -m str(pitch_deg)
     publish.multiple(msgs, hostname=host)
+    
     sleep(0.5)
+   
