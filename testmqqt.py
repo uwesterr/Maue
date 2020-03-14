@@ -28,7 +28,8 @@ def on_message(client, userdata, msg):
             pickle.dump([msg.topic,msg.payload], f)
         with open('objs.pkl') as f:  # Python 3: open(..., 'rb')
              retrievedMsg, retrievedValue,  = pickle.load(f)
-        print("retrieved", retrievedMsg, " :", retrievedValue)     
+        print("retrieved", retrievedMsg, " :", retrievedValue)  
+        print("class value", type(retrievedMsg))     
 
 
 client = mqtt.Client()
@@ -36,8 +37,6 @@ client.on_connect = on_connect
 client.on_message = on_message
 
 client.connect("192.168.4.1", 1883, 60)
-
-client.publish("test/message","OFF paho ")#publish
 
 client.subscribe([("IMU/pitch/offset", 2), ("IMU/roll/offset", 2),
 ("IMU/pitch",2),("IMU/roll",2),("IMU/offset",2)])
