@@ -2,11 +2,14 @@
         Read Gyro and Accelerometer by Interfacing Raspberry Pi with MPU6050 using Python
     http://www.electronicwings.com
 '''
+# added offset handling
+
 import smbus            #import SMBus module of I2C
 from time import sleep          #import
 import math
 import paho.mqtt.publish as publish
-
+import paho.mqtt.client as mqtt
+import pickle
 host = "localhost"
 
 
@@ -60,6 +63,27 @@ bus = smbus.SMBus(1)    # or bus = smbus.SMBus(0) for older version boards
 Device_Address = 0x68   # MPU6050 device address
 
 MPU_Init()
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload))
+    if(msg.topic == "IMU/roll"):
+        print("IMU roll message: ", msg.topic)
+        print(" value: ", msg.payload, "degree")
+     if(msg.topic == )   
+        with open('objs.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
+            pickle.dump([msg.topic,msg.payload], f)
+        with open('objs.pkl') as f:  # Python 3: open(..., 'rb')
+             retrievedMsg, retrievedValue,  = pickle.load(f)
+        print("retrieved", retrievedMsg, " :", retrievedValue)     
+
+
+client = mqtt.Client()
+client.on_connect = on_connect
+client.on_message = on_message
+
+client.connect("192.168.4.1", 1883, 60)
+
+client.subscribe([("IMU/pitch/offset", 2), ("IMU/roll/offset", 2),
+("IMU/pitch",2),("IMU/roll",2)])
 
 print (" Reading Data of Gyroscope and Accelerometer")
 
